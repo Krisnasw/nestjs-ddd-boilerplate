@@ -13,7 +13,6 @@ import { Reflector } from '@nestjs/core';
 
 @Module({
   imports: [
-    UserModule,
     LoggerModule.forRoot({
       pinoHttp: {
         safe: true,
@@ -30,6 +29,7 @@ import { Reflector } from '@nestjs/core';
     EventEmitterModule.forRoot(),
     TerminusModule,
     SharedModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService, Reflector],
