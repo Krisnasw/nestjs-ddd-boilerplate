@@ -29,10 +29,9 @@ async function bootstrap() {
   );
 
   const settingService = app.select(SharedModule).get(SettingService);
-  const reflector = app.select(Reflector);
   let globalInterceptors: NestInterceptor[] = [
     new ContextRequestInterceptor(settingService),
-    new ClassSerializerInterceptor(reflector),
+    new ClassSerializerInterceptor(app.get(Reflector)),
   ];
 
   app.register(helmet);
@@ -67,7 +66,7 @@ async function bootstrap() {
     setupSwagger(app, settingService.swaggerConfig);
   }
 
-  app.setGlobalPrefix('/api');
+  app.setGlobalPrefix('api');
 
   const port = settingService.getNumber('PORT') || 3000;
   const host = settingService.get('HOST') || '127.0.0.1';

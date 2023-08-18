@@ -9,6 +9,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { SharedModule } from './shared.module';
 import { UserModule } from './modules/users/users.module';
 import { PrismaService } from './shared/prisma/prisma.service';
+import { Reflector } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -31,6 +32,6 @@ import { PrismaService } from './shared/prisma/prisma.service';
     SharedModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, Reflector],
 })
 export class AppModule {}
