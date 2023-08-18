@@ -7,9 +7,12 @@ import { AbstractRequestContext } from './common/contexts/abstract-request.conte
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TerminusModule } from '@nestjs/terminus';
 import { SharedModule } from './shared.module';
+import { UserModule } from './modules/users/users.module';
+import { PrismaService } from './shared/prisma/prisma.service';
 
 @Module({
   imports: [
+    UserModule,
     LoggerModule.forRoot({
       pinoHttp: {
         safe: true,
@@ -28,6 +31,6 @@ import { SharedModule } from './shared.module';
     SharedModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
