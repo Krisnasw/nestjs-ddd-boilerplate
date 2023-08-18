@@ -3,9 +3,6 @@ import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { LogLevel } from '@nestjs/common';
 // import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { SnakeNamingStrategy } from '../typeorm/strategies/snake-naming.strategy';
-import * as path from 'path';
 import { IAwsConfig } from '@/interfaces/aws.interface';
 import { ISwaggerConfigInterface } from '@/interfaces/swagger.interface';
 
@@ -61,58 +58,6 @@ export class SettingService {
 
   get nodeEnv(): string {
     return this.get('NODE_ENV') || 'development';
-  }
-
-  get typeOrmConfig(): TypeOrmModuleOptions {
-    let entities = [__dirname + '/../../modules/**/*.entity{.ts,.js}'];
-    let migrations = [__dirname + '/../../migrations/*{.ts,.js}'];
-
-    if ((module as any).hot) {
-      const entityContext = (require as any).context(
-        './../../modules',
-        true,
-        /\.entity\.ts$/,
-      );
-      entities = entityContext.keys().map((id) => {
-        const entityModule = entityContext(id);
-        const [entity] = Object.values(entityModule);
-        return entity;
-      });
-      const migrationContext = (require as any).context(
-        './../../migrations',
-        false,
-        /\.ts$/,
-      );
-      migrations = migrationContext.keys().map((id) => {
-        const migrationModule = migrationContext(id);
-        const [migration] = Object.values(migrationModule);
-        return migration;
-      });
-    }
-    return {
-      entities,
-      migrations,
-      keepConnectionAlive: true,
-      type: 'postgres',
-      host: this.get('DB_HOST'),
-      port: this.getNumber('DB_PORT'),
-      username: this.get('DB_USERNAME'),
-      password: this.get('DB_PASSWORD'),
-      database: this.get('DB_DATABASE_NAME'),
-      migrationsRun: false,
-      logging: this.nodeEnv === 'development',
-      namingStrategy: new SnakeNamingStrategy(),
-      synchronize: false,
-      extra: {
-        connectionLimit: this.getNumber('DB_CONNECTION_LIMIT') || 100,
-      },
-      cache: {
-        type: 'redis',
-        options: {
-          url: this.get('REDIS_URL'),
-        },
-      },
-    };
   }
 
   get eventStoreConfig() {
