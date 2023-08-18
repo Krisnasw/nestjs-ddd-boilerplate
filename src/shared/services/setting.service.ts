@@ -242,8 +242,9 @@ export class SettingService {
   get swaggerConfig(): ISwaggerConfigInterface {
     return {
       path: this.get('SWAGGER_PATH') || '/api/docs',
-      title: this.get('SWAGGER_TITLE') || 'B2H Microservice API',
-      description: this.get('SWAGGER_DESCRIPTION'),
+      title:
+        this.get('SWAGGER_TITLE') || 'Rekberia Charizard Microservices API ',
+      description: this.get('SWAGGER_DESCRIPTION') || 'Rekberia Charizard Microservices API Documentation',
       version: this.get('SWAGGER_VERSION') || '0.0.1',
       scheme: this.get('SWAGGER_SCHEME') === 'https' ? 'https' : 'http',
     };

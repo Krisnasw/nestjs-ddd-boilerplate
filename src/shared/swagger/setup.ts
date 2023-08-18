@@ -1,12 +1,12 @@
 import * as fs from 'fs';
-import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { SettingService } from '@/shared/services/setting.service';
 import { ISwaggerConfigInterface } from '@/interfaces/swagger.interface';
+import { NestFastifyApplication } from '@nestjs/platform-fastify';
 
 export function setupSwagger(
-  app: INestApplication,
+  app: NestFastifyApplication,
   config: ISwaggerConfigInterface,
 ) {
   const configService = new SettingService();
@@ -14,7 +14,10 @@ export function setupSwagger(
     .setTitle(config.title)
     .setDescription(config.description)
     .setVersion(config.version)
-    .addServer(configService.app.url)
+    .addServer(configService.app.url + "/api")
+    .setContact("Sociolite", "https://sociolite.id", "hello@sociolite.id")
+    .setLicense("MIT", "https://opensource.org/licenses/MIT")
+    .setVersion("1.0")
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
       'JWT',
