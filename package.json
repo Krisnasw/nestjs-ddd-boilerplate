@@ -17,9 +17,15 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prepare": "husky install",
+    "prepush": "npm run test",
+    "prettier:check": "prettier --check ./**/*.{ts,js,json,*rc}",
+    "prettier:write": "prettier --write ./**/*.{ts,js,json,*rc}"
   },
   "dependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
     "@fastify/compress": "^6.4.0",
     "@fastify/helmet": "^11.0.0",
     "@fastify/rate-limit": "^8.0.3",
@@ -41,6 +47,7 @@
     "class-validator": "^0.14.0",
     "fastify-swagger": "^5.2.0",
     "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
     "mysql2": "^3.6.0",
     "nestjs-i18n": "^10.2.6",
     "nestjs-pino": "^3.3.0",
