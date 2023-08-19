@@ -30,7 +30,7 @@ async function bootstrap() {
 
   const settingService = app.select(SharedModule).get(SettingService);
   let globalInterceptors: NestInterceptor[] = [
-    new ContextRequestInterceptor(settingService),
+    // new ContextRequestInterceptor(settingService),
     new ClassSerializerInterceptor(app.get(Reflector)),
   ];
 
@@ -59,11 +59,11 @@ async function bootstrap() {
     }),
   );
 
-  app.enableVersioning({
-    type: VersioningType.HEADER,
-    header: settingService.app.versionKey,
-    defaultVersion: settingService.app.versionDefault || VERSION_NEUTRAL,
-  });
+  // app.enableVersioning({
+  //   type: VersioningType.HEADER,
+  //   header: settingService.app.versionKey,
+  //   defaultVersion: settingService.app.versionDefault || VERSION_NEUTRAL,
+  // });
 
   if (['development', 'staging'].includes(settingService.nodeEnv)) {
     setupSwagger(app, settingService.swaggerConfig);
