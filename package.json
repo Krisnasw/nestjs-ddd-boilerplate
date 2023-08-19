@@ -11,7 +11,7 @@
     "eslint:fix": "npm run eslint:check -- --fix",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "npm run prettier:check",
-    "precommit": "lint-staged && npm run lint",
+    "precommit": "npm run test",
     "prepare": "husky install",
     "prepush": "npm run test",
     "prettier:check": "prettier --check ./**/*.{ts,js,json,*rc}",

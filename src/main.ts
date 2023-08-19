@@ -10,14 +10,11 @@ import {
   NestInterceptor,
   ClassSerializerInterceptor,
   ValidationPipe,
-  VersioningType,
-  VERSION_NEUTRAL,
 } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 import { SharedModule } from './shared.module';
 import { SettingService } from './shared/services/setting.service';
-import { ContextRequestInterceptor } from './interceptors/context-request.interceptor';
 import { setupSwagger } from './shared/swagger/setup';
 
 async function bootstrap() {
