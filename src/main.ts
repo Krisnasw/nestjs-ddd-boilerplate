@@ -16,6 +16,9 @@ import { AppModule } from './app.module';
 import { SharedModule } from './shared.module';
 import { SettingService } from './shared/services/setting.service';
 import { setupSwagger } from './shared/swagger/setup';
+import { NewrelicInterceptor } from './interceptors/newrelic.interceptor';
+import { CustomI18nValidationExceptionFilter } from './filters/custom-i18n-exception.filter';
+import { i18nValidationErrorFactory } from 'nestjs-i18n';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -27,10 +30,32 @@ async function bootstrap() {
   );
 
   const settingService = app.select(SharedModule).get(SettingService);
-  const globalInterceptors: NestInterceptor[] = [
+  let globalInterceptors: NestInterceptor[] = [
     // new ContextRequestInterceptor(settingService),
     new ClassSerializerInterceptor(app.get(Reflector)),
   ];
+
+  // NEWRELIC
+  if (settingService.newrelic.enabled) {
+    globalInterceptors = [
+      ...globalInterceptors,
+      new NewrelicInterceptor(settingService),
+    ];
+  }
+
+  // const loggerService = app.select(SharedModule).get(LoggerService);
+  // app.useLogger(loggerService);
+  // if (settingService.log.morgan.enabled) {
+  //   app.use(
+  //     morgan('combined', {
+  //       stream: {
+  //         write: (message) => {
+  //           loggerService.log(message);
+  //         },
+  //       },
+  //     }),
+  //   );
+  // }
 
   app.register(helmet);
   app.register(compress);
@@ -45,12 +70,18 @@ async function bootstrap() {
     });
   }
 
+  app.useGlobalFilters(
+    // new NotFoundExceptionFilter(loggerService),
+    // new HttpExceptionFilter(loggerService),
+    new CustomI18nValidationExceptionFilter(),
+  );
+
   app.useGlobalInterceptors(...globalInterceptors);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
-      // exceptionFactory: i18nValidationErrorFactory,
+      exceptionFactory: i18nValidationErrorFactory,
       validationError: {
         target: false,
       },
