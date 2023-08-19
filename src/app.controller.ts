@@ -7,10 +7,10 @@ import {
   HealthCheckService,
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
+import { PrismaClient } from '@prisma/client';
 
 import { AppService } from './app.service';
 import { SettingService } from './shared/services/setting.service';
-import { PrismaClient } from '@prisma/client';
 
 @Controller('/')
 @ApiTags('hello-world')

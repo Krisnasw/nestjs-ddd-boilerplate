@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { LogLevel } from '@nestjs/common';
+
 // import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
 import { IAwsConfig } from '@/interfaces/aws.interface';
 import { ISwaggerConfigInterface } from '@/interfaces/swagger.interface';
@@ -244,7 +245,9 @@ export class SettingService {
       path: this.get('SWAGGER_PATH') || '/api/docs',
       title:
         this.get('SWAGGER_TITLE') || 'Rekberia Charizard Microservices API ',
-      description: this.get('SWAGGER_DESCRIPTION') || 'Rekberia Charizard Microservices API Documentation',
+      description:
+        this.get('SWAGGER_DESCRIPTION') ||
+        'Rekberia Charizard Microservices API Documentation',
       version: this.get('SWAGGER_VERSION') || '0.0.1',
       scheme: this.get('SWAGGER_SCHEME') === 'https' ? 'https' : 'http',
     };

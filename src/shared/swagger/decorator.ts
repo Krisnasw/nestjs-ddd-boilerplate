@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeaders } from '@nestjs/swagger';
+
 import { SettingService } from '@/shared/services/setting.service';
 
 const configService = new SettingService();

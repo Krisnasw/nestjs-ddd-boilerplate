@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpModuleOptions, HttpModuleOptionsFactory } from '@nestjs/axios';
+
 import { SettingService } from './setting.service';
 
 @Injectable()

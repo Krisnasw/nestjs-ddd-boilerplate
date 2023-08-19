@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { LoggerModule } from 'nestjs-pino';
 import { RequestContextModule } from '@medibloc/nestjs-request-context';
-import { AbstractRequestContext } from './common/contexts/abstract-request.context';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TerminusModule } from '@nestjs/terminus';
+
+import { AbstractRequestContext } from './common/contexts/abstract-request.context';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 import { SharedModule } from './shared.module';
 import { UserModule } from './modules/users/users.module';
 import { PrismaService } from './shared/prisma/prisma.service';

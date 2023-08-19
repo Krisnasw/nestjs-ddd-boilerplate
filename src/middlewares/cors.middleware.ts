@@ -1,4 +1,5 @@
 import { ServerResponse } from 'http';
+
 import {
   Injectable,
   NestMiddleware,
@@ -16,7 +17,7 @@ export class CorsMiddleware implements NestMiddleware {
     const getMethod = (method) => RequestMethod[method];
     const origins = request.headers.origin;
     const origin = (Array.isArray(origins) ? origins[0] : origins) || '';
-    const allowedOrigins = ["*"];
+    const allowedOrigins = ['*'];
     const allowedMethods = [
       RequestMethod.GET,
       RequestMethod.HEAD,

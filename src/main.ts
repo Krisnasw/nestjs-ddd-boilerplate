@@ -2,13 +2,10 @@ import * as rateLimit from '@fastify/rate-limit';
 import * as helmet from '@fastify/helmet';
 import * as compress from '@fastify/compress';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { SharedModule } from './shared.module';
-import { SettingService } from './shared/services/setting.service';
 import {
   NestInterceptor,
   ClassSerializerInterceptor,
@@ -16,6 +13,10 @@ import {
   VersioningType,
   VERSION_NEUTRAL,
 } from '@nestjs/common';
+
+import { AppModule } from './app.module';
+import { SharedModule } from './shared.module';
+import { SettingService } from './shared/services/setting.service';
 import { ContextRequestInterceptor } from './interceptors/context-request.interceptor';
 import { setupSwagger } from './shared/swagger/setup';
 
@@ -29,7 +30,7 @@ async function bootstrap() {
   );
 
   const settingService = app.select(SharedModule).get(SettingService);
-  let globalInterceptors: NestInterceptor[] = [
+  const globalInterceptors: NestInterceptor[] = [
     // new ContextRequestInterceptor(settingService),
     new ClassSerializerInterceptor(app.get(Reflector)),
   ];
