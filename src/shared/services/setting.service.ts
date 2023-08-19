@@ -3,9 +3,10 @@ import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { LogLevel } from '@nestjs/common';
 
-// import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
+import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
 import { IAwsConfig } from '@/interfaces/aws.interface';
 import { ISwaggerConfigInterface } from '@/interfaces/swagger.interface';
+import path from 'path';
 
 export class SettingService {
   constructor() {
@@ -230,15 +231,15 @@ export class SettingService {
     };
   }
 
-  //   get i18nConfig(): I18nOptionsWithoutResolvers {
-  //     return {
-  //       fallbackLanguage: 'id',
-  //       loaderOptions: {
-  //         path: path.join(__dirname, '../../assets/i18n/'),
-  //         watch: true,
-  //       },
-  //     };
-  //   }
+  get i18nConfig(): I18nOptionsWithoutResolvers {
+    return {
+      fallbackLanguage: 'id',
+      loaderOptions: {
+        path: path.join(__dirname, '../../assets/i18n/'),
+        watch: true,
+      },
+    };
+  }
 
   get swaggerConfig(): ISwaggerConfigInterface {
     return {
