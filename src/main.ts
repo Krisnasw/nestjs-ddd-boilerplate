@@ -25,7 +25,7 @@ async function bootstrap() {
     new FastifyAdapter({
       logger: true,
     }),
-    { cors: true },
+    { bufferLogs: true },
   );
 
   const settingService = app.select(SharedModule).get(SettingService);
@@ -36,6 +36,9 @@ async function bootstrap() {
 
   app.register(helmet);
   app.register(compress);
+  app.enableCors({
+    origin: '*',
+  });
 
   if (settingService.rateLimit.enabled) {
     app.register(rateLimit, {
@@ -68,11 +71,8 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  const port = settingService.getNumber('PORT') || 3000;
+  const port = settingService.getNumber('PORT') || 4000;
   const host = settingService.get('HOST') || '127.0.0.1';
-  if (settingService.app.cors) {
-    app.enableCors();
-  }
   await app.listen(port, host);
 
   console.warn(`server running on port ${host}:${port}`);

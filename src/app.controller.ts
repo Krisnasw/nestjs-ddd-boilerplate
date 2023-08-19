@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, HttpCode } from '@nestjs/common';
 import { RedisOptions, Transport } from '@nestjs/microservices';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   MicroserviceHealthIndicator,
   HealthCheck,
@@ -25,6 +25,7 @@ export class AppController {
 
   @Get('/')
   @HttpCode(HttpStatus.OK)
+  @ApiExcludeEndpoint()
   @ApiResponse({ status: HttpStatus.OK, description: 'Hello world' })
   getHello(): string {
     return this._appService.getHello();
