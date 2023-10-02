@@ -10,6 +10,9 @@ import { AppController } from './app.controller';
 import { SharedModule } from './shared.module';
 import { UserModule } from './modules/users/users.module';
 import { PrismaService } from './shared/prisma/prisma.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { SettingService } from './shared/services/setting.service';
 
 @Module({
   imports: [
@@ -22,6 +25,13 @@ import { PrismaService } from './shared/prisma/prisma.service';
             : undefined,
       },
     }),
+    JwtModule.registerAsync({
+      global: true,
+      useFactory: (settingService: SettingService) => ({
+        secret: settingService.jwtConfig.secretKey,
+      }),
+      inject: [SettingService],
+    }),
     RequestContextModule.forRoot({
       contextClass: AbstractRequestContext,
       isGlobal: true,
@@ -30,6 +40,7 @@ import { PrismaService } from './shared/prisma/prisma.service';
     TerminusModule,
     SharedModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

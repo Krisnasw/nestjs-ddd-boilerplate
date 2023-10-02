@@ -31,7 +31,6 @@ async function bootstrap() {
 
   const settingService = app.select(SharedModule).get(SettingService);
   let globalInterceptors: NestInterceptor[] = [
-    // new ContextRequestInterceptor(settingService),
     new ClassSerializerInterceptor(app.get(Reflector)),
   ];
 
@@ -42,20 +41,6 @@ async function bootstrap() {
       new NewrelicInterceptor(settingService),
     ];
   }
-
-  // const loggerService = app.select(SharedModule).get(LoggerService);
-  // app.useLogger(loggerService);
-  // if (settingService.log.morgan.enabled) {
-  //   app.use(
-  //     morgan('combined', {
-  //       stream: {
-  //         write: (message) => {
-  //           loggerService.log(message);
-  //         },
-  //       },
-  //     }),
-  //   );
-  // }
 
   app.register(helmet);
   app.register(compress);
@@ -70,11 +55,7 @@ async function bootstrap() {
     });
   }
 
-  app.useGlobalFilters(
-    // new NotFoundExceptionFilter(loggerService),
-    // new HttpExceptionFilter(loggerService),
-    new CustomI18nValidationExceptionFilter(),
-  );
+  app.useGlobalFilters(new CustomI18nValidationExceptionFilter());
 
   app.useGlobalInterceptors(...globalInterceptors);
   app.useGlobalPipes(
@@ -87,12 +68,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  // app.enableVersioning({
-  //   type: VersioningType.HEADER,
-  //   header: settingService.app.versionKey,
-  //   defaultVersion: settingService.app.versionDefault || VERSION_NEUTRAL,
-  // });
 
   if (['development', 'staging'].includes(settingService.nodeEnv)) {
     setupSwagger(app, settingService.swaggerConfig);

@@ -2,11 +2,12 @@ import * as dotenv from 'dotenv';
 import * as winston from 'winston';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { LogLevel } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import { I18nOptionsWithoutResolvers } from 'nestjs-i18n/dist/interfaces/i18n-options.interface';
 import { IAwsConfig } from '@/interfaces/aws.interface';
 import { ISwaggerConfigInterface } from '@/interfaces/swagger.interface';
-import path from 'path';
 
 export class SettingService {
   constructor() {
@@ -245,12 +246,51 @@ export class SettingService {
     return {
       path: this.get('SWAGGER_PATH') || '/api/docs',
       title:
-        this.get('SWAGGER_TITLE') || 'Rekberia Charizard Microservices API ',
+        this.get('SWAGGER_TITLE') || 'Talentclass API ',
       description:
         this.get('SWAGGER_DESCRIPTION') ||
-        'Rekberia Charizard Microservices API Documentation',
+        'Talentclass API Documentation',
       version: this.get('SWAGGER_VERSION') || '0.0.1',
       scheme: this.get('SWAGGER_SCHEME') === 'https' ? 'https' : 'http',
+    };
+  }
+
+  get jwtConfig() {
+    let privateKey = null;
+    let publicKey = null;
+
+    const privateKeyPath = path.join(
+      __dirname,
+      '..',
+      'certificates',
+      'auth-rs256.key',
+    );
+    const publicKeyPath = path.join(
+      __dirname,
+      '..',
+      'certificates',
+      'auth-rs256.key.pub',
+    );
+
+    if (fs.existsSync(privateKeyPath)) {
+      privateKey = fs.readFileSync(privateKeyPath);
+    } else {
+      privateKey = this.get('JWT_TOKEN_SECRET_PRIVATE_KEY');
+    }
+
+    if (fs.existsSync(publicKeyPath)) {
+      publicKey = fs.readFileSync(publicKeyPath);
+    } else {
+      publicKey = this.get('JWT_TOKEN_SECRET_PUBLIC_KEY');
+    }
+
+    return {
+      secretKey: this.get('JWT_SECRET') || 'y0urS3cr3tz',
+      refreshTokenSecret: this.get('JWT_REFRESH_TOKEN_SECRET') || 'y0urS3cr3tz',
+      expiresToken: this.get('JWT_EXPIRES_TOKEN') || '14d',
+      expiresRefreshToken: this.get('JWT_EXPIRES_REFRESH_TOKEN') || '30d',
+      privateKey,
+      publicKey,
     };
   }
 }

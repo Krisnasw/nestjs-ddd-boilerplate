@@ -4,156 +4,36 @@ generator client {
 }
 
 datasource db {
-  provider   = "postgresql"
-  url        = env("DB_URL")
-  extensions = [uuid_ossp(map: "uuid-ossp", schema: "public")]
-}
-
-model admins {
-  id                String    @id @db.Uuid
-  name              String    @db.VarChar(255)
-  email             String    @db.VarChar(255)
-  email_verified_at DateTime? @db.Timestamp(0)
-  password          String    @db.VarChar(255)
-  address           String?   @db.VarChar(255)
-  phone             String?   @db.VarChar(255)
-  avatar            String?   @db.VarChar(255)
-  deleted_at        DateTime? @db.Timestamp(0)
-  remember_token    String?   @db.VarChar(100)
-  created_at        DateTime? @db.Timestamp(0)
-  updated_at        DateTime? @db.Timestamp(0)
-}
-
-model article_categories {
-  id         String     @id @db.Uuid
-  name       String     @db.VarChar(255)
-  slug       String     @db.VarChar(255)
-  deleted_at DateTime?  @db.Timestamp(0)
-  created_at DateTime?  @default(now()) @db.Timestamp(0)
-  updated_at DateTime?  @db.Timestamp(0)
-  articles   articles[]
-}
-
-model articles {
-  id                  String             @id @db.Uuid
-  article_category_id String             @db.Uuid
-  title               String             @db.VarChar(255)
-  slug                String             @db.VarChar(255)
-  description         String
-  author              String             @db.VarChar(255)
-  image               String?            @db.VarChar(255)
-  deleted_at          DateTime?          @db.Timestamp(0)
-  created_at          DateTime?          @db.Timestamp(0)
-  updated_at          DateTime?          @db.Timestamp(0)
-  article_categories  article_categories @relation(fields: [article_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model failed_jobs {
-  id         BigInt   @id @default(autoincrement())
-  uuid       String   @db.VarChar(255)
-  connection String
-  queue      String
-  payload    String
-  exception  String
-  failed_at  DateTime @default(now()) @db.Timestamp(0)
-}
-
-model faqs {
-  id          String    @id @db.Uuid
-  title       String    @db.VarChar(255)
-  description String
-  deleted_at  DateTime? @db.Timestamp(0)
-  created_at  DateTime? @db.Timestamp(0)
-  updated_at  DateTime? @db.Timestamp(0)
-}
-
-model health_check_result_history_items {
-  id                   BigInt    @id @default(autoincrement())
-  check_name           String    @db.VarChar(255)
-  check_label          String    @db.VarChar(255)
-  status               String    @db.VarChar(255)
-  notification_message String?
-  short_summary        String?   @db.VarChar(255)
-  meta                 Json      @db.Json
-  ended_at             DateTime  @db.Timestamp(0)
-  batch                String    @db.Uuid
-  created_at           DateTime? @db.Timestamp(0)
-  updated_at           DateTime? @db.Timestamp(0)
-}
-
-model migrations {
-  id        Int    @id @default(autoincrement())
-  migration String @db.VarChar(255)
-  batch     Int
-}
-
-model password_reset_tokens {
-  email      String    @id @db.VarChar(255)
-  token      String    @db.VarChar(255)
-  created_at DateTime? @db.Timestamp(0)
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model password_resets {
-  email      String    @db.VarChar(255)
-  token      String    @db.VarChar(255)
-  created_at DateTime? @db.Timestamp(0)
-
-  @@ignore
-}
-
-model personal_access_tokens {
-  id             BigInt    @id @default(autoincrement())
-  tokenable_type String    @db.VarChar(255)
-  tokenable_id   BigInt
-  name           String    @db.VarChar(255)
-  token          String    @db.VarChar(64)
-  abilities      String?
-  last_used_at   DateTime? @db.Timestamp(0)
-  expires_at     DateTime? @db.Timestamp(0)
-  created_at     DateTime? @db.Timestamp(0)
-  updated_at     DateTime? @db.Timestamp(0)
-}
-
-model product_categories {
-  id                     String                   @id @db.Uuid
-  title                  String                   @db.VarChar(255)
-  slug                   String                   @db.VarChar(255)
-  image                  String?                  @db.VarChar(255)
-  level                  Int
-  deleted_at             DateTime?                @db.Timestamp(0)
-  created_at             DateTime?                @db.Timestamp(0)
-  updated_at             DateTime?                @db.Timestamp(0)
-  product_sub_categories product_sub_categories[]
-}
-
-model product_sub_categories {
-  id                  String             @id @db.Uuid
-  product_category_id String             @db.Uuid
-  title               String             @db.VarChar(255)
-  slug                String             @db.VarChar(255)
-  image               String?            @db.VarChar(255)
-  level               Int
-  deleted_at          DateTime?          @db.Timestamp(0)
-  created_at          DateTime?          @db.Timestamp(0)
-  updated_at          DateTime?          @db.Timestamp(0)
-  product_categories  product_categories @relation(fields: [product_category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  provider = "postgresql"
+  url      = env("DB_URL")
 }
 
 model users {
-  id                String    @id @db.Uuid
-  code              String    @db.VarChar(255)
-  name              String    @db.VarChar(255)
-  email             String    @db.VarChar(255)
-  email_verified_at DateTime? @db.Timestamp(0)
-  username          String?   @db.VarChar(255)
-  password          String    @db.VarChar(255)
-  address           String?   @db.VarChar(255)
-  phone             String?   @db.VarChar(255)
-  avatar            String?   @db.VarChar(255)
-  dob               DateTime? @db.Date
-  deleted_at        DateTime? @db.Timestamp(0)
-  remember_token    String?   @db.VarChar(100)
-  created_at        DateTime? @db.Timestamp(0)
-  updated_at        DateTime? @db.Timestamp(0)
+  id         Int       @id @default(autoincrement())
+  name       String?   @db.VarChar
+  email      String?   @db.VarChar(255)
+  password   String?   @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @db.Timestamp(6)
+  todos      todos[]
+}
+
+model categories {
+  id    Int     @id @default(autoincrement())
+  name  String? @db.VarChar(255)
+  todos todos[]
+}
+
+model todos {
+  id          Int         @id @default(autoincrement())
+  category_id Int?
+  user_id     Int?
+  title       String?     @db.VarChar(255)
+  description String?
+  due_date    DateTime?   @db.Date
+  created_at  DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?   @default(now()) @db.Timestamp(6)
+  completed   Boolean?    @default(false)
+  categories  categories? @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users       users?      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

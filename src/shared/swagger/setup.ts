@@ -19,10 +19,7 @@ export function setupSwagger(
     .setContact('Sociolite', 'https://sociolite.id', 'hello@sociolite.id')
     .setLicense('MIT', 'https://opensource.org/licenses/MIT')
     .setVersion('1.0')
-    .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
-      'JWT',
-    )
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
