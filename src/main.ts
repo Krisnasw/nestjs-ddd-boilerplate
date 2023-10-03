@@ -76,7 +76,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   const port = settingService.getNumber('PORT') || 4000;
-  const host = settingService.get('HOST') || '127.0.0.1';
+  const host = settingService.get('HOST') || '0.0.0.0';
   await app.listen(port, host);
 
   console.warn(`server running on port ${host}:${port}`);
