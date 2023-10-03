@@ -1,38 +1,29 @@
-# ---- Base Node ----
-FROM node:lts-alpine3.9 AS base
-RUN apk add --no-cache git
-WORKDIR /app
-RUN mkdir src templates
-RUN chown -R node:node /app
-USER node
+# Base image
+FROM node:18-alpine
 
-# ---- Dependencies ----
-FROM base AS dependencies
-COPY ./package*.json ./
-RUN npm install -d
+# Set environment variables
+ENV DB_URL=<your_db_url>
+ENV MONGO_URL=<your_mongo_url>
 
-# ---- Build ----
-FROM dependencies AS build
-WORKDIR /app
-COPY ./templates /app/templates
-COPY ./src /app/src
-COPY ./ts*.json ./
-COPY ormconfig.js ./
-RUN npm run build
+# Create app directory
+WORKDIR /usr/src/app
 
-# ---- Polishing ----
-FROM base AS polishing
-COPY ./package*.json ./
-RUN npm install --production -d
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json yarn.lock ./
 
-# --- Release with Alpine ----
-FROM node:lts-alpine3.9 AS release
-WORKDIR /app
-RUN mkdir dist templates node_modules
-RUN chown -R node:node /app
-USER node
-COPY --from=polishing app/node_modules node_modules/
-COPY --from=build app/dist dist/
-COPY --from=build app/templates templates/
-COPY --from=build app/ormconfig.js ./
-CMD ["node","dist/src/main.js"]
+# Install app dependencies
+RUN yarn install
+
+# Bundle app source
+COPY . .
+
+# Install and configure Prisma
+RUN npx prisma generate
+
+RUN yarn mongo:generate
+
+# Creates a "dist" folder with the production build
+RUN yarn build
+
+# Start the server using the production build
+CMD [ "node", "dist/main.js" ]
