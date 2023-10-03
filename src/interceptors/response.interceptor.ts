@@ -34,7 +34,7 @@ export class TransformResponseInterceptor<T>
         const statusCode =
           error?.status || context.switchToHttp().getResponse().statusCode;
         const message = error?.message || 'Something went wrong';
-        error.name = 'minerallink-service-error';
+        error.name = 'talentclass-api-error';
 
         throw new HttpException(
           {

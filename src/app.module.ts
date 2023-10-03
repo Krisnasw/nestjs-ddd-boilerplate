@@ -13,6 +13,8 @@ import { PrismaService } from './shared/prisma/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SettingService } from './shared/services/setting.service';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { TodosModule } from './modules/todos/todos.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { SettingService } from './shared/services/setting.service';
     SharedModule,
     UserModule,
     AuthModule,
+    CategoriesModule,
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
