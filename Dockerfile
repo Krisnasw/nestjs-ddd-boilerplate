@@ -20,8 +20,6 @@ COPY . .
 # Install and configure Prisma
 RUN npx prisma generate
 
-RUN yarn mongo:generate
-
 # Creates a "dist" folder with the production build
 RUN yarn build
 
